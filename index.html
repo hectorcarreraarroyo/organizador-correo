@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
+<title>Organizador de correo</title><link rel="stylesheet" href="panel.css"></head>
+<body><div id="loading">Cargando el panel…</div>
+<script>
+/* Los datos llegan en el fragmento (#...) de la dirección: el navegador nunca los envía al servidor. */
+(async function () {
+  try {
+    var h = location.hash.slice(1); if (!h) throw 0;
+    h = h.replace(/-/g, "+").replace(/_/g, "/"); h += "===".slice((h.length + 3) % 4);
+    var b = atob(h), u = new Uint8Array(b.length);
+    for (var i = 0; i < b.length; i++) u[i] = b.charCodeAt(i);
+    var s = new Blob([u]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+    window.DATA = JSON.parse(await new Response(s).text());
+    var sc = document.createElement("script"); sc.src = "panel.js"; document.body.appendChild(sc);
+  } catch (e) {
+    document.getElementById("loading").textContent = "No hay datos para mostrar. Abre el panel desde el archivo que genera el agente Organizador de correo.";
+  }
+})();
+</script>
+</body></html>
